@@ -1,93 +1,64 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import TabNavigator from 'react-native-tab-navigator';
+import {StyleSheet, View, Image} from 'react-native';
+import TbpopularPage from './app/pages/Tbpopular';
+import TbtrendingPage from './app/pages/Tbtrending';
+import TbfavoritePage from './app/pages/Tbfavorite';
+import TbmyPage from './app/pages/Tbmy';
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedTab: 'tb_polular'
+    }
+  }
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+  _renderTabarItems(selectedTab, tabTitle, tabColor, icon, Component){
+    return (<TabNavigator.Item
+              selected = {this.state.selectedTab === selectedTab}
+              title = {tabTitle}
+              selectedTitleStyle={{color:tabColor}}
+              renderIcon = {() => <Image style = {styles.botImage} source={icon}/>}
+              renderSelectedIcon = {() => <Image style = {[styles.botImage, {tintColor: tabColor}]} source={icon}/>}
+              onPress = {() => this.setState({selectedTab: selectedTab})}>
+              <Component />
+            </TabNavigator.Item>)
+  }
 
-type Props = {};
-export default class App extends Component<Props> {
   render() {
     return (
       <View style = {styles.container}>
         <TabNavigator>
-          <TabNavigator.Item
-            selected = {this.state.selectedTab === 'tb_polular'}
-            title = '最热'
-            selectedTitleStyle={{color:'red'}}
-            renderIcon = {() => <Image style = {styles.botImage} source={require('./app/img/ic_polular.png')}/>}
-            renderSelectedIcon = {() => <Image style = {[styles.botImage, {tintColor: 'red'}]} source={require('./app/img/ic_polular.png')}/>}
-            badgeText='1'
-            onPress = {() => this.setState({selectedTab: 'tb_polular'})}>
-            <View style={styles.page1}>
-              
-            </View>
-          </TabNavigator.Item>
-          <TabNavigator.Item
-            selected = {this.state.selectedTab === 'tb_trending'}
-            title = '趋势'
-            selectedTitleStyle={{color:'blue'}}
-            renderIcon = {() => <Image style = {styles.botImage} source={require('./app/img/ic_trending.png')}/>}
-            renderSelectedIcon = {() => <Image style = {[styles.botImage, {tintColor: 'blue'}]} source={require('./app/img/ic_trending.png')}/>}
-            onPress = {() => this.setState({selectedTab: 'tb_trending'})}>
-            <View style={styles.page2}>
-
-            </View>
-          </TabNavigator.Item>
-          <TabNavigator.Item
-            selected = {this.state.selectedTab === 'tb_favorite'}
-            title = '收藏'
-            selectedTitleStyle={{color:'green'}}
-            renderIcon = {() => <Image style = {styles.botImage} source={require('./app/img/ic_favorite.png')}/>}
-            renderSelectedIcon = {() => <Image style = {[styles.botImage, {tintColor: 'green'}]} source={require('./app/img/ic_favorite.png')}/>}
-            onPress = {() => this.setState({selectedTab: 'tb_favorite'})}>
-            <View style={styles.page3}>
-
-            </View>
-          </TabNavigator.Item>
-          <TabNavigator.Item
-            selected = {this.state.selectedTab === 'tb_my'}
-            title = '我的'
-            selectedTitleStyle={{color:'yellow'}}
-            renderIcon = {() => <Image style = {styles.botImage} source={require('./app/img/ic_my.png')}/>}
-            renderSelectedIcon = {() => <Image style = {[styles.botImage, {tintColor: 'yellow'}]} source={require('./app/img/ic_my.png')}/>}
-            onPress = {() => this.setState({selectedTab: 'tb_my'})}>
-            <View style={styles.page4}>
-
-            </View>
-          </TabNavigator.Item>
+          {this._renderTabarItems('tb_polular', '新闻', 'red', require('./app/img/ic_polular.png'), TbpopularPage)}
+          {this._renderTabarItems('tb_trending', '趋势', 'blue', require('./app/img/ic_trending.png'), TbtrendingPage)}
+          {this._renderTabarItems('tb_favorite', '收藏', 'green', require('./app/img/ic_favorite.png'), TbfavoritePage)}
+          {this._renderTabarItems('tb_my', '我的', 'yellow', require('./app/img/ic_my.png'), TbmyPage)}
         </TabNavigator>
       </View>
     );
   }
+
+
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    flex: 1
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  page2: {
+    flex:1,
+    backgroundColor:'blue'
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  page3: {
+    flex:1,
+    backgroundColor:'green'
   },
+  page4: {
+    flex:1,
+    backgroundColor:'yellow'
+  },
+  botImage: {
+    width: 22,
+    height: 22
+  }
 });
